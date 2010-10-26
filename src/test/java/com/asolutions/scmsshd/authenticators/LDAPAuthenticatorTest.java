@@ -54,4 +54,13 @@ public class LDAPAuthenticatorTest extends MockTestCase {
 		assertNull(auth.authenticate(USERNAME, PASSWORD, mockServerSession));
 	}
 
+	@Test
+	public void testAuthenticateFailsIfPasswordIsNull() throws Exception {
+		final ServerSession mockServerSession = context.mock(ServerSession.class);
+		final LDAPBindingProvider ldapBinding = context.mock(LDAPBindingProvider.class);
+		final LDAPUsernameResolver ldapUsernameResolver = context.mock(LDAPUsernameResolver.class);
+
+		LDAPAuthenticator auth = new LDAPAuthenticator(ldapUsernameResolver,ldapBinding);
+		assertNull(auth.authenticate(USERNAME, "", mockServerSession));
+	}
 }

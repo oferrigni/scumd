@@ -23,9 +23,14 @@ public class LDAPAuthenticator implements IPasswordAuthenticator {
 
 	public Object authenticate(String username, String password, ServerSession session) {
 		try {
+			if(password == null || "".equals(password)){
+				log.warn("Empty passwords not allowed.  Failing before username resolution.  Unresolved username was " + username);
+				return null;
+			}
 			String nameInNamespace = resolver.resolveUserName(username);
 			return this.provider.getBinding(nameInNamespace, password);
-		} catch (NamingException e) {
+		}
+		catch (NamingException e) {
 			log.error("Error Authenticating", e);
 			return null;
 		}
